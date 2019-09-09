@@ -48,16 +48,11 @@ $ python manage.py runserver
 The test server now runs at `http://localhost:8000`.   
 You can access the various endpoints listed below
 
-### Endpoints
+**Endpoints**
 
-#### /users
-List all users
-
-#### /users/1
-List the user with the ID `1`
-
-#### /users/1/posts
-List all posts of user with ID `1`
+`GET` `/users` - List all users   
+`GET` `/users/1` - List the user with the ID `1`   
+`GET` `/users/1/posts` - List all posts of user with ID `1`
 
 ## License
 This project is published under the MIT License
