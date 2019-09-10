@@ -31,9 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
-    #'authentication.apps.AuthenticationConfig',
-    #'oauth2_provider',
     'rest_framework',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,12 +52,12 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    #'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
-    #),
-    #'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
-    #)
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 OAUTH2_PROVIDER = {
