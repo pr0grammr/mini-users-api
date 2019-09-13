@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
-from users.models import User
+from users.models import User, Interest
 from random import randint
+from core.management.commands.utils import get_random_values_from_list
 
 
 class Command(BaseCommand):
@@ -20,16 +21,27 @@ class Command(BaseCommand):
         f = Faker()
 
         for i in range(0, options['amount']):
-            user = User()
 
             first_name, last_name = self._build_name_components(f.name())
             email = self._build_random_email(first_name=first_name, last_name=last_name)
 
-            user.first_name = first_name
-            user.last_name = last_name
-            user.email = email
+            interests = Interest.objects.values('id')
+            interests = [Interest.objects.get(pk=interest['id']) for interest in interests]
+            random_interests = get_random_values_from_list(interests)
+
+            user = User.objects.create_user(
+                username='{}.{}'.format(first_name.lower(), last_name.lower()),
+                email=email,
+                password=f.password(),
+                first_name=first_name,
+                last_name=last_name
+            )
+
+            for random_interest in random_interests:
+                user.interests.add(random_interest)
 
             user.save()
+
 
     def _get_random_value(self, lst):
         return lst[randint(0, len(lst) -1 )]
