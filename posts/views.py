@@ -1,22 +1,23 @@
 from django.shortcuts import render
-from rest_framework.generics import RetrieveAPIView
+from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer
 from rest_framework import status
 from rest_framework import permissions
+from core import resources
 
 
-class SinglePostView(APIView):
-    permission_classes = (permissions.AllowAny, )
+class CreatePostView(resources.CreateResource):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = PostSerializer
 
-    def get(self, request, pk, format=None):
-        try:
-            post = Post.objects.get(pk=pk)
-            serializer = PostSerializer(post)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Post.DoesNotExist:
-            return Response({'message': 'Post does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
+class ListUpdateDestroyPostView(resources.UpdateResource, resources.RetrieveResource, resources.DestroyResource):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
