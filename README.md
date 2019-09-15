@@ -24,17 +24,10 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-Now you have all tables created. Fill the API with data by running the following
+Now you have all tables created. Fill the API with data by running the setup script
 
 ```bash
-# creates some user interests, e.g.: "Party", "Sports", "Art"
-$ python manage.py createfakeinterests
-
-# creates 100 fake users
-$ python manage.py createfakeusers 100
-
-# creates random number of fake posts for each user
-$ python manage.py createfakeposts
+$ ./setup.sh
 ```
 
 Start the server
@@ -48,7 +41,29 @@ $ python manage.py runserver
 The test server now runs at `http://localhost:8000`.   
 You can access the various endpoints listed below
 
+### Access Token
+
+Before you can access the endpoints, you have to generate an access token. First, you need to create a real user by executing the command 
+```bash
+$ python manage.py createuser
+```
+
+Now, you can generate an access token by sending a `POST` request to `http://localhost:8000/auth/token` with params `{"username": "<your-username>", "password": "<your-password>"}`
+You will get an access token and a refresh token.
+The response should look similar to this
+
+```json
+{
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU2ODU5NDUxMSwianRpIjoiZTVjMWNiMjBiOGY1NDE0YmE3N2ZmMjY4ODIzYWE5MzMiLCJ1c2VyX2lkIjoxMDN9.uH_gSN6O0_-tSUNxy7Zk2oLK_zvJDHXAOxU-6hqlApU",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTY4NTA4NDExLCJqdGkiOiI4YTYyOThjYjA4Y2Q0NzE1YjQwNzU4ODU5OTU3Yzk3MyIsInVzZXJfaWQiOjEwM30.sUm54ozOWEL66VprJh8F_ikkhyrg8OkVYk2aPVXH6OM"
+}
+```
+
+You can use the refresh token to get a new access token by sending a `POST` request to `http://localhost:8000/auth/token/refresh` with params `{"refresh": "<your-refresh-token>"}`
+
 ### Endpoints
+
+Include your access token in the header `Authorization: Bearer <your-access-token>`
 
 #### Users
 `GET` `/users` - List all users   
@@ -77,6 +92,6 @@ You can access the various endpoints listed below
 `DELETE` `/posts/10` - Deletes post by ID `10`
 
 ## License
-This project is published under the MIT License
+This project is published under the <a href="https://github.com/pr0grammr/mini-users-api/blob/master/LICENSE" title="MIT License">MIT License</a>
 
 Feel free to extend the views, models or commands for personal use
