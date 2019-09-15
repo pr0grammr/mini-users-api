@@ -41,6 +41,8 @@ class Command(BaseCommand):
                 user.interests.add(random_interest)
 
             user.save()
+            self.stdout.write(self.style.SUCCESS('Created user {}'.format(email)))
+        self.stdout.write(self.style.SUCCESS('Created {} fake users'.format(options['amount'])))
 
 
     def _get_random_value(self, lst):

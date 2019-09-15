@@ -22,3 +22,5 @@ class Command(BaseCommand):
             name, value = interest
 
             Interest.objects.create(name=name, value=value)
+            self.stdout.write(self.style.SUCCESS('Imported interest: {}'.format(value)))
+        self.stdout.write(self.style.SUCCESS('Imported {} interests'.format(len(self.FAKE_INTERESTS))))
