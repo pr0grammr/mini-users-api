@@ -48,11 +48,33 @@ $ python manage.py runserver
 The test server now runs at `http://localhost:8000`.   
 You can access the various endpoints listed below
 
-**Endpoints**
+### Endpoints
 
+#### Users
 `GET` `/users` - List all users   
-`GET` `/users/1` - List the user with the ID `1`   
-`GET` `/users/1/posts` - List all posts of user with ID `1`
+
+`GET` `/users/1` - List the user by ID `1`  
+`GET` `/users/1/posts` - List all posts of user by ID `1`  
+`PUT` `/users/1` - Updates user by ID `1` with possible params
+
+```json
+{
+  "username": "<updated-username>",
+  "email": "<updated-email>",
+  "first_name": "<updated-first-name>",
+  "last_name": "<updated-last-name>"
+}
+```
+
+`DELETE` `/users/1` - Deletes user by ID 1
+
+#### Posts
+
+`POST` `/posts` - Creates new post with params `{"text": "Updated post text"}`    
+
+`GET` `/posts/10` - Get single post by ID  
+`UPDATE` `/posts/10` - Updates post by ID `10` with params `{"text": "Updated post text"}`  
+`DELETE` `/posts/10` - Deletes post by ID `10`
 
 ## License
 This project is published under the MIT License
