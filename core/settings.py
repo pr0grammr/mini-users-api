@@ -60,13 +60,7 @@ REST_FRAMEWORK = {
     )
 }
 
-OAUTH2_PROVIDER = {
-    #'SCOPES': {
-        #'read': 'Read scope',
-        #'write': 'Write scope',
-
-    #}
-}
+APPEND_SLASH = True
 
 ROOT_URLCONF = 'core.urls'
 
