@@ -1,27 +1,34 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import User
+from rest_framework.generics import get_object_or_404
 from django.http import Http404
-from rest_framework import status
+from posts.serializers import PostSerializer
+from .models import User
 from .serializers import UserSerializer
+from core import resources
+from rest_framework import permissions
+from posts.models import Post
 
 
-class UserListView(APIView):
-    def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class RetrieveUpdateDeleteUserView(resources.UpdateResource, resources.RetrieveResource, resources.DestroyResource):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
-class UserDetailView(APIView):
-    def get(self, request, pk, format=None):
+class RetrieveUserPostsView(resources.ListResource):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = PostSerializer
 
+    def get_object(self):
         try:
-            user = User.objects.get(pk=pk)
-            serializer = UserSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            user = User.objects.get(pk=self.kwargs['pk'])
+            return Post.objects.filter(user=user)
         except User.DoesNotExist:
-            return Response({
-                'message': 'User with ID {} was not found'.format(pk)
-            }, status=status.HTTP_404_NOT_FOUND)
+            raise Http404
+
+    def get_queryset(self):
+        posts = self.get_object()
+        return posts
+
+
+
 
