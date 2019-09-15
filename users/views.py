@@ -8,6 +8,12 @@ from rest_framework import permissions
 from posts.models import Post
 
 
+class UsersView(resources.ListResource):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
 class RetrieveUpdateDeleteUserView(resources.UpdateResource, resources.RetrieveResource, resources.DestroyResource):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = UserSerializer
